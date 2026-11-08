@@ -1,0 +1,213 @@
+@import '@picocss/pico/css/pico.classless.min.css';
+
+:root:not([data-theme]) {
+	--pico-form-element-border-color: var(--pico-muted-color);
+	--status-active: #17603f;
+	--status-gone: #47606e;
+	--status-limited: #7d4b00;
+	--status-open: #2f4f86;
+	--status-suspended: #a01c28;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme]) {
+		--status-active: #86dcb4;
+		--status-gone: #b4c7d1;
+		--status-limited: #f3c077;
+		--status-open: #b0c8f3;
+		--status-suspended: #ffa3a8;
+	}
+}
+
+body > header,
+body > main,
+body > footer {
+	margin-inline: auto;
+	max-width: 44rem;
+	padding-inline: 1rem;
+	width: 100%;
+}
+
+body > header {
+	padding-block: 1.5rem 0;
+}
+
+body > main {
+	padding-block: 2rem;
+}
+
+body > footer {
+	color: var(--pico-muted-color);
+	font-size: 0.875rem;
+	padding-block: 1rem 2rem;
+}
+
+[data-x-cloak] {
+	display: none;
+}
+
+.name {
+	font-family: ui-serif, 'Iowan Old Style', Palatino, Georgia, serif;
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin: 0;
+}
+
+.name a {
+	color: inherit;
+	text-decoration-color: var(--pico-muted-border-color);
+}
+
+.actions {
+	column-gap: 0.75rem;
+	display: flex;
+}
+
+.actions button {
+	margin-block-end: var(--pico-spacing);
+	width: auto;
+}
+
+.actions button:not([type='reset']) {
+	flex-grow: 1;
+}
+
+.question,
+.verdict h2 {
+	font-family: ui-serif, 'Iowan Old Style', Palatino, Georgia, serif;
+	font-size: clamp(2.5rem, 9vw, 4.5rem);
+	font-weight: 500;
+	letter-spacing: -0.02em;
+	line-height: 1.05;
+	margin-block: 0 2rem;
+	overflow-wrap: anywhere;
+	text-wrap: balance;
+}
+
+label {
+	font-weight: 600;
+}
+
+fieldset legend {
+	font-weight: 600;
+}
+
+.servers {
+	column-gap: 1.25rem;
+	display: flex;
+	flex-wrap: wrap;
+	row-gap: 0.25rem;
+}
+
+.servers label {
+	font-weight: 400;
+	width: auto;
+}
+
+form button {
+	width: auto;
+}
+
+small[role='alert'] {
+	color: var(--status-suspended);
+}
+
+[aria-live] {
+	margin-block-end: 0;
+}
+
+/* Without other servers, an empty `template` directly precedes this `details` */
+.verdict template + details {
+	margin-block-start: 2.25rem;
+}
+
+main > details {
+	margin-block-start: 1.5rem;
+}
+
+.verdict {
+	margin-block: 2.5rem;
+}
+
+.verdict h2 {
+	color: var(--verdict);
+	margin-block: 0.25rem 1.25rem;
+}
+
+.verdict[data-status='active'] {
+	--verdict: var(--status-active);
+}
+
+.verdict[data-status='deleted'],
+.verdict[data-status='memorial'],
+.verdict[data-status='moved'],
+.verdict[data-status='not-found'],
+.verdict[data-status='unavailable'] {
+	--verdict: var(--status-gone);
+}
+
+.verdict[data-status='limited'] {
+	--verdict: var(--status-limited);
+}
+
+.verdict[data-status='suspended'] {
+	--verdict: var(--status-suspended);
+}
+
+.verdict[data-status='undetermined'],
+.verdict[data-status='unknown'] {
+	--verdict: var(--status-open);
+}
+
+.verdict .account {
+	color: var(--pico-muted-color);
+	margin: 0;
+	overflow-wrap: anywhere;
+}
+
+dl {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem 2.5rem;
+	margin-block: 1.5rem;
+}
+
+dl div {
+	min-width: 0;
+}
+
+dt {
+	color: var(--pico-muted-color);
+	font-size: 0.875rem;
+}
+
+dd {
+	margin: 0;
+}
+
+.table {
+	overflow-x: auto;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-block-start: var(--pico-typography-spacing-top);
+}
+
+td small {
+	color: var(--pico-muted-color);
+	display: block;
+}
+
+.requests {
+	font-size: 0.875rem;
+	overflow-wrap: anywhere;
+	padding-inline-start: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		scroll-behavior: auto;
+		transition: none;
+	}
+}

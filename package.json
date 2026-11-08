@@ -1,0 +1,44 @@
+{
+  "author": "Jens Oliver Meiert",
+  "bugs": "https://github.com/j9t/mamut/issues",
+  "description": "Fediverse account status check",
+  "devDependencies": {
+    "@alpinejs/csp": "^3.17.5",
+    "@eslint/js": "^10.0.1",
+    "@picocss/pico": "^2.1.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "html-minifier": "^5.0.1",
+    "vite": "^8.3.6"
+  },
+  "funding": "https://github.com/j9t/mamut?sponsor=1",
+  "homepage": "https://j9t.github.io/mamut/",
+  "keywords": [
+    "activitypub",
+    "banned",
+    "fediverse",
+    "lemmy",
+    "mastodon",
+    "misskey",
+    "moderation",
+    "suspended",
+    "webfinger"
+  ],
+  "license": "UNLICENSED",
+  "name": "mamut",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j9t/mamut.git"
+  },
+  "scripts": {
+    "build": "vite build --base /mamut/ && html-minifier --input-dir=site/build --output-dir=site/build --preset comprehensive",
+    "lint": "eslint .",
+    "prepare": "git config core.hooksPath .githooks || true",
+    "serve": "vite",
+    "test": "node --test test/*.test.js",
+    "test:watch": "node --test --watch test/*.test.js"
+  },
+  "type": "module",
+  "version": "1.0.0"
+}

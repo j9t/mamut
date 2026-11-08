@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title>Mamut · Check whether a Fediverse account is in good standing</title>
+		<meta name="description" content="Find out what Fediverse servers publicly report about an account: active, limited, suspended, deleted, or moved.">
+		<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+		<link rel="stylesheet" href="./default.css">
+		<script type="module" src="./default.js"></script>
+	</head>
+	<body data-x-data="mamut">
+		<header>
+			<h1 class="name">
+				<span data-x-show="isHome">Mamut</span>
+				<a href="./" data-x-cloak data-x-show="isActive" data-x-bind="bindHome">Mamut</a>
+			</h1>
+		</header>
+		<main>
+			<p class="question" data-x-show="isIdle">Is this Fediverse account in good standing?</p>
+			<form data-x-bind="bindForm">
+				<label for="handle">Account</label>
+				<input id="handle" name="handle" type="text" placeholder="@name@server.example" required autocapitalize="none" autocomplete="off" spellcheck="false" data-x-model="handle" data-x-bind="bindHandle" aria-describedby="handle-error">
+				<small id="handle-error" role="alert" data-x-show="hasError" data-x-text="error"></small>
+				<fieldset>
+					<legend>Also check on these Mastodon servers (<a href="#" data-x-bind="bindToggleMajors" data-x-text="toggleMajorsLabel">check all</a>)</legend>
+					<div class="servers">
+						<template data-x-for="entry in majors">
+							<label>
+								<input type="checkbox" data-x-model="entry.checked">
+								<span data-x-text="entry.server"></span>
+							</label>
+						</template>
+					</div>
+				</fieldset>
+				<label for="servers">Other servers (optional, separated by commas)</label>
+				<input id="servers" name="servers" type="text" placeholder="server.example, another.example" autocapitalize="none" autocomplete="off" spellcheck="false" data-x-model="servers">
+				<small>Each server you check sees your IP address and the account you look up.</small>
+				<div class="actions">
+					<button type="submit" data-x-bind="bindButton" data-x-text="buttonLabel">Check account</button>
+					<button type="reset" data-x-cloak data-x-show="canClear">Clear</button>
+				</div>
+			</form>
+			<div aria-live="polite">
+				<template data-x-if="hasResult">
+					<div class="verdict" data-x-bind="bindVerdict">
+						<p class="account" data-x-text="result.account.handle"></p>
+						<h2 data-x-text="result.headline"></h2>
+						<template data-x-if="hasRestrictions">
+							<p><strong data-x-text="restrictions"></strong></p>
+						</template>
+						<p data-x-text="result.explanation"></p>
+						<template data-x-for="note in result.notes">
+							<p data-x-text="note"></p>
+						</template>
+						<dl>
+							<template data-x-for="fact in facts">
+								<div>
+									<dt data-x-text="fact.label"></dt>
+									<dd data-x-text="fact.value"></dd>
+								</div>
+							</template>
+						</dl>
+						<template data-x-if="hasProfile">
+							<p><a data-x-bind="bindProfile">Open profile</a></p>
+						</template>
+						<template data-x-if="hasServers">
+							<div>
+								<h3>Other servers</h3>
+								<div class="table">
+									<table>
+										<thead>
+											<tr>
+												<th scope="col">Server</th>
+												<th scope="col">This account</th>
+												<th scope="col">Its home server</th>
+											</tr>
+										</thead>
+										<tbody>
+											<template data-x-for="row in serverRows">
+												<tr>
+													<th scope="row" data-x-text="row.server"></th>
+													<td data-x-text="row.account"></td>
+													<td>
+														<span data-x-text="row.domainBlock"></span>
+														<small data-x-text="row.reason"></small>
+													</td>
+												</tr>
+											</template>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</template>
+						<details>
+							<summary>Requests made</summary>
+							<ul class="requests">
+								<template data-x-for="request in requestRows">
+									<li data-x-text="request"></li>
+								</template>
+							</ul>
+						</details>
+					</div>
+				</template>
+			</div>
+			<details>
+				<summary>What Mamut can tell</summary>
+				<p>Servers decide what they reveal, and Fediverse software differs. Mamut only reports what a server actually says.</p>
+				<div class="table">
+					<table>
+						<thead>
+							<tr>
+								<th scope="col">Software</th>
+								<th scope="col">What’s detectable</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">Mastodon, Hometown</th>
+								<td>Suspended, limited, moved, memorialized, and, from version 4.7, self-deleted.</td>
+							</tr>
+							<tr>
+								<th scope="row">Lemmy</th>
+								<td>Banned (with end date), self-deleted.</td>
+							</tr>
+							<tr>
+								<th scope="row">Misskey, Sharkey</th>
+								<td>Limited and moved. Suspended accounts look like accounts that never existed.</td>
+							</tr>
+							<tr>
+								<th scope="row">Everything else</th>
+								<td>Whether the handle resolves. A resolving account may still be suspended.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<p>The account’s home server decides whether it’s suspended overall. Other servers can restrict it independently, but only know accounts that have reached them, so “Not known here” is normal for smaller accounts.</p>
+				<p>Blocks between individual users are private, and no tool can see them.</p>
+			</details>
+		</main>
+		<footer>
+			<p>Runs in your browser (<a href="https://github.com/j9t/mamut">source</a>, <a href="./THIRD-PARTY-NOTICES.txt">third-party licenses</a>). A project by <a href="https://meiert.com/">Jens Oliver Meiert</a>. <a href="https://github.com/j9t/mamut/issues/">Please report issues.</a></p>
+		</footer>
+	</body>
+</html>
