@@ -24,7 +24,7 @@ export const resolveWebfinger = async (client, { domain, username }) => {
   const response = await client.request(`https://${domain}/.well-known/webfinger?resource=${resource}`, { accept: 'application/jrd+json' });
 
   const links = Array.isArray(response.json?.links) ? response.json.links : [];
-  const urlActor = parsePublicUrl(links.find(link => link?.rel === 'self' && PATTERN_ACTIVITY_TYPE.test(link?.type))?.href);
+  const urlActor = parsePublicUrl(links.find(link => link?.rel === 'self' && PATTERN_ACTIVITY_TYPE.test(link.type))?.href);
   const urlProfile = parsePublicUrl(links.find(link => link?.rel === REL_PROFILE)?.href);
 
   let found = null;

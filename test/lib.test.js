@@ -7,7 +7,7 @@ import { createFetcher, routesNodeinfo, routesWebfinger, routesWebfingerStatus }
 
 const account = { acct: 'alice@social.example', domain: 'social.example', username: 'alice' };
 
-describe('createClient', () => {
+describe('`createClient`', () => {
   test('Omits credentials and the referrer', async () => {
     const { calls, fetcher } = createFetcher({ 'GET https://a.example/x': { json: {} } });
     await createClient({ fetcher }).request('https://a.example/x');
@@ -61,7 +61,7 @@ describe('createClient', () => {
   });
 });
 
-describe('createClient safeguards', () => {
+describe('`createClient` safeguards', () => {
   test('Skips requests once aborted', async () => {
     const { calls, fetcher } = createFetcher({ 'GET https://a.example/x': { json: {} } });
     const controller = new AbortController();
@@ -102,7 +102,7 @@ describe('createClient safeguards', () => {
   });
 });
 
-describe('resolveWebfinger', () => {
+describe('`resolveWebfinger`', () => {
   test('Returns the actor URL and host', async () => {
     const { fetcher } = createFetcher(routesWebfinger('alice', 'social.example'));
     const result = await resolveWebfinger(createClient({ fetcher }), account);
@@ -151,7 +151,7 @@ describe('resolveWebfinger', () => {
   });
 });
 
-describe('detectSoftware', () => {
+describe('`detectSoftware`', () => {
   test('Returns the lowercased name and version', async () => {
     const { fetcher } = createFetcher(routesNodeinfo('a.example', 'Mastodon', '4.7.5'));
     assert.deepStrictEqual(await detectSoftware(createClient({ fetcher }), 'a.example'), { name: 'mastodon', version: '4.7.5' });
@@ -189,7 +189,7 @@ describe('detectSoftware', () => {
   });
 });
 
-describe('parseVersion', () => {
+describe('`parseVersion`', () => {
   test('Parses fork suffixes', () => {
     assert.deepStrictEqual(parseVersion('4.2.0+hometown-1.1.2'), { major: 4, minor: 2, patch: 0, prerelease: false });
   });
@@ -203,7 +203,7 @@ describe('parseVersion', () => {
   });
 });
 
-describe('isAtLeast', () => {
+describe('`isAtLeast`', () => {
   for (const [version, expected] of [
     ['4.7.0', true],
     ['4.7.5', true],

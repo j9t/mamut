@@ -1,6 +1,7 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert';
-import { checkAccount, InputError, STATUS } from '../src/mamut.js';
+import { STATUS } from '../src/lib/status.js';
+import { checkAccount, InputError } from '../src/mamut.js';
 import { createFetcher, routesNodeinfo, routesWebfinger, routesWebfingerStatus } from './helpers/fetcher.js';
 
 const HOST = 'social.example';
@@ -11,7 +12,7 @@ const URL_CONTROL = `GET https://${HOST}/@mamut_control_absent`;
 
 const check = (routes, options) => checkAccount(HANDLE, { fetcher: createFetcher(routes).fetcher, ...options });
 
-describe('checkAccount on Mastodon', () => {
+describe('`checkAccount` on Mastodon', () => {
   const base = (version = '4.7.5') => ({ ...routesNodeinfo(HOST, 'mastodon', version), ...routesWebfinger('alice', HOST) });
   const accountActive = { acct: 'alice', username: 'alice' };
 
@@ -36,6 +37,15 @@ describe('checkAccount on Mastodon', () => {
   test('Qualifies a local move target with the server', async () => {
     const result = await check({ ...base(), [URL_LOOKUP]: { json: { ...accountActive, moved: { acct: 'alice2' } } } });
     assert.strictEqual(result.movedTo, `@alice2@${HOST}`);
+  });
+
+  test('Reports a move without a usable target', async () => {
+    for (const moved of [{}, { acct: '' }, { acct: 42 }]) {
+      const result = await check({ ...base(), [URL_LOOKUP]: { json: { ...accountActive, moved } } });
+      assert.strictEqual(result.status, STATUS.MOVED);
+      assert.strictEqual(result.movedTo, null);
+      assert.strictEqual(result.headline, 'Moved to another account');
+    }
   });
 
   test('Reports a memorialized account', async () => {
@@ -80,6 +90,13 @@ describe('checkAccount on Mastodon', () => {
   test('Does not mistake a firewall 403 for a self-deletion', async () => {
     const result = await check({ ...base(), [URL_LOOKUP]: { status: 404 }, [URL_PROFILE]: { status: 403 }, [URL_CONTROL]: { status: 403 } });
     assert.strictEqual(result.status, STATUS.UNAVAILABLE);
+  });
+
+  test('Skips the control request before Mastodon 4.7, which can’t confirm a self-deletion', async () => {
+    const { calls, fetcher } = createFetcher({ ...base('4.6.2'), [URL_LOOKUP]: { status: 404 }, [URL_PROFILE]: { status: 403 }, [URL_CONTROL]: { status: 404 } });
+    const result = await checkAccount(HANDLE, { fetcher });
+    assert.strictEqual(result.status, STATUS.UNAVAILABLE);
+    assert.ok(!calls.some(call => call.url === URL_CONTROL.slice(4)));
   });
 
   test('Keeps a suspension ambiguous before Mastodon 4.7 once data is gone', async () => {
@@ -147,7 +164,7 @@ describe('checkAccount on Mastodon', () => {
   });
 });
 
-describe('checkAccount on Lemmy', () => {
+describe('`checkAccount` on Lemmy', () => {
   const URL_USER = `GET https://${HOST}/api/v3/user?username=alice&limit=1`;
   const URL_ACTOR = `GET https://${HOST}/u/alice`;
   const base = (version = '0.19.21') => ({ ...routesNodeinfo(HOST, 'lemmy', version), ...routesWebfinger('alice', HOST) });
@@ -189,7 +206,7 @@ describe('checkAccount on Lemmy', () => {
   });
 });
 
-describe('checkAccount on Misskey', () => {
+describe('`checkAccount` on Misskey', () => {
   const URL_SHOW = `POST https://${HOST}/api/users/show`;
   const base = (name = 'misskey') => ({ ...routesNodeinfo(HOST, name, '2026.1.0'), ...routesWebfinger('alice', HOST) });
 
@@ -230,7 +247,7 @@ describe('checkAccount on Misskey', () => {
   });
 });
 
-describe('checkAccount on other software', () => {
+describe('`checkAccount` on other software', () => {
   for (const name of ['akkoma', 'pleroma', 'gotosocial', 'pixelfed']) {
     test(`Never reports ${name} accounts as active`, async () => {
       const result = await check({ ...routesNodeinfo(HOST, name, '1.0.0'), ...routesWebfinger('alice', HOST) });
@@ -269,7 +286,7 @@ describe('checkAccount on other software', () => {
   });
 });
 
-describe('checkAccount result', () => {
+describe('`checkAccount` result', () => {
   test('Includes a headline, explanation, and request log', async () => {
     const result = await check({
       ...routesNodeinfo(HOST, 'mastodon', '4.7.5'),

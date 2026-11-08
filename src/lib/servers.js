@@ -13,8 +13,7 @@ export const SERVERS_MAJOR = Object.freeze([
   'techhub.social'
 ]);
 
-export const SOFTWARE_MASTODON = new Set(['hometown', 'mastodon']);
-
+const SOFTWARE_MASTODON = new Set(['hometown', 'mastodon']);
 const SEVERITY_RANK = new Map([['noop', 0], ['silence', 1], ['suspend', 2]]);
 const STATUSES_PRIVATE = new Set([401, 403, 404]);
 
@@ -51,14 +50,14 @@ const expandParents = (domain) => {
 
 /**
  * Compares digests too, as servers can mask part of a blocked domain’s name
- * @param {unknown} blocks
+ * @param {unknown[]} blocks
  * @param {string[]} domains
  */
 export const matchDomainBlock = async (blocks, domains) => {
   const candidates = [...new Set(domains.flatMap(expandParents))];
   const digests = new Set(await Promise.all(candidates.map(hashSha256)));
 
-  const matches = (Array.isArray(blocks) ? blocks : [])
+  const matches = blocks
     .filter(block => SEVERITY_RANK.has(block?.severity) && (candidates.includes(block.domain) || digests.has(block.digest)))
     .sort((a, b) => SEVERITY_RANK.get(b.severity) - SEVERITY_RANK.get(a.severity));
   return matches[0] ?? null;
@@ -91,5 +90,5 @@ export const checkOnServer = async (client, server, account, domains) => {
     client.request(`https://${server}/api/v1/instance/domain_blocks`)
   ]);
 
-  return { account: interpretAccount(lookup), server, softwareLabel: labelSoftware(software), supported: true, ...await interpretBlocks(blocks, domains) };
+  return { account: interpretAccount(lookup), server, supported: true, ...await interpretBlocks(blocks, domains) };
 };

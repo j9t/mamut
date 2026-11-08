@@ -9,19 +9,9 @@
 	--status-suspended: #a01c28;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root:not([data-theme]) {
-		--status-active: #86dcb4;
-		--status-gone: #b4c7d1;
-		--status-limited: #f3c077;
-		--status-open: #b0c8f3;
-		--status-suspended: #ffa3a8;
-	}
-}
-
 body > header,
-body > main,
-body > footer {
+body > footer,
+body > main {
 	margin-inline: auto;
 	max-width: 44rem;
 	padding-inline: 1rem;
@@ -32,18 +22,60 @@ body > header {
 	padding-block: 1.5rem 0;
 }
 
-body > main {
-	padding-block: 2rem;
-}
-
 body > footer {
 	color: var(--pico-muted-color);
 	font-size: 0.875rem;
 	padding-block: 1rem 2rem;
 }
 
-[data-x-cloak] {
-	display: none;
+body > main {
+	padding-block: 2rem;
+}
+
+main > details {
+	margin-block-start: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-block-start: var(--pico-typography-spacing-top);
+}
+
+dl {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem 2.5rem;
+	margin-block: 1.5rem;
+}
+
+dl div {
+	min-width: 0;
+}
+
+dt {
+	color: var(--pico-muted-color);
+	font-size: 0.875rem;
+}
+
+dd {
+	margin: 0;
+}
+
+fieldset legend {
+	font-weight: 600;
+}
+
+label {
+	font-weight: 600;
+}
+
+td small {
+	color: var(--pico-muted-color);
+	display: block;
+}
+
+small[role='alert'] {
+	color: var(--status-suspended);
 }
 
 .name {
@@ -56,6 +88,30 @@ body > footer {
 .name a {
 	color: inherit;
 	text-decoration-color: var(--pico-muted-border-color);
+}
+
+.question,
+.verdict h2 {
+	font-family: ui-serif, 'Iowan Old Style', Palatino, Georgia, serif;
+	font-size: clamp(2.5rem, 9vw, 4.5rem);
+	font-weight: 500;
+	letter-spacing: -0.02em;
+	line-height: 1.05;
+	margin-block: 0 2rem;
+	overflow-wrap: anywhere;
+	text-wrap: balance;
+}
+
+.servers {
+	column-gap: 1.25rem;
+	display: flex;
+	flex-wrap: wrap;
+	row-gap: 0.25rem;
+}
+
+.servers label {
+	font-weight: 400;
+	width: auto;
 }
 
 .actions {
@@ -72,48 +128,8 @@ body > footer {
 	flex-grow: 1;
 }
 
-.question,
-.verdict h2 {
-	font-family: ui-serif, 'Iowan Old Style', Palatino, Georgia, serif;
-	font-size: clamp(2.5rem, 9vw, 4.5rem);
-	font-weight: 500;
-	letter-spacing: -0.02em;
-	line-height: 1.05;
-	margin-block: 0 2rem;
-	overflow-wrap: anywhere;
-	text-wrap: balance;
-}
-
-label {
-	font-weight: 600;
-}
-
-fieldset legend {
-	font-weight: 600;
-}
-
-.servers {
-	column-gap: 1.25rem;
-	display: flex;
-	flex-wrap: wrap;
-	row-gap: 0.25rem;
-}
-
-.servers label {
-	font-weight: 400;
-	width: auto;
-}
-
-form button {
-	width: auto;
-}
-
-small[role='alert'] {
-	color: var(--status-suspended);
-}
-
-[aria-live] {
-	margin-block-end: 0;
+.verdict {
+	margin-block: 2.5rem;
 }
 
 /* Without other servers, an empty `template` directly precedes this `details` */
@@ -121,17 +137,15 @@ small[role='alert'] {
 	margin-block-start: 2.25rem;
 }
 
-main > details {
-	margin-block-start: 1.5rem;
-}
-
-.verdict {
-	margin-block: 2.5rem;
-}
-
 .verdict h2 {
 	color: var(--verdict);
 	margin-block: 0.25rem 1.25rem;
+}
+
+.verdict .account {
+	color: var(--pico-muted-color);
+	margin: 0;
+	overflow-wrap: anywhere;
 }
 
 .verdict[data-status='active'] {
@@ -159,44 +173,8 @@ main > details {
 	--verdict: var(--status-open);
 }
 
-.verdict .account {
-	color: var(--pico-muted-color);
-	margin: 0;
-	overflow-wrap: anywhere;
-}
-
-dl {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.75rem 2.5rem;
-	margin-block: 1.5rem;
-}
-
-dl div {
-	min-width: 0;
-}
-
-dt {
-	color: var(--pico-muted-color);
-	font-size: 0.875rem;
-}
-
-dd {
-	margin: 0;
-}
-
 .table {
 	overflow-x: auto;
-}
-
-h3 {
-	font-size: 1.25rem;
-	margin-block-start: var(--pico-typography-spacing-top);
-}
-
-td small {
-	color: var(--pico-muted-color);
-	display: block;
 }
 
 .requests {
@@ -205,9 +183,16 @@ td small {
 	padding-inline-start: 1rem;
 }
 
-@media (prefers-reduced-motion: reduce) {
-	* {
-		scroll-behavior: auto;
-		transition: none;
+[data-x-cloak] {
+	display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme]) {
+		--status-active: #86dcb4;
+		--status-gone: #b4c7d1;
+		--status-limited: #f3c077;
+		--status-open: #b0c8f3;
+		--status-suspended: #ffa3a8;
 	}
 }

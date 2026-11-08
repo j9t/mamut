@@ -162,13 +162,13 @@ const mamut = () => ({
     return this.result.servers.map(entry => ({ server: entry.server, ...describeServer(entry) }));
   },
 
-  // Links only fill in the form, so that shared or embedded links can’t generate traffic
   get toggleMajorsLabel() {
     return this.areAllMajorsChecked ? 'uncheck all' : 'check all';
   },
 
   init() {
     this.$watch('handle', value => syncHomeServer(this.majors, readDomain(value)));
+    // Links only fill in the form, so that shared or embedded links can’t generate traffic
     const fillFromHash = () => {
       const handle = readHash();
       if (handle) this.handle = correctHandle(handle);

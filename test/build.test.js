@@ -4,7 +4,7 @@ import { before, describe, test } from 'node:test';
 import assert from 'node:assert';
 import { promisify } from 'node:util';
 
-describe('build', () => {
+describe('Build', () => {
   let html;
   let source;
 

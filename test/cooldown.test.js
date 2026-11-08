@@ -2,7 +2,7 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert';
 import { createCooldown } from '../src/lib/cooldown.js';
 
-describe('createCooldown', () => {
+describe('`createCooldown`', () => {
   const setup = () => {
     let time = 1000;
     return { advance: (ms) => { time += ms; }, tryStart: createCooldown(3000, () => time) };

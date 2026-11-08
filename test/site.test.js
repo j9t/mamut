@@ -7,7 +7,7 @@ const read = (path) => readFileSync(new URL(`../site/${path}`, import.meta.url),
 const html = read('index.html');
 const css = read('default.css');
 
-describe('site', () => {
+describe('Site', () => {
   test('Never renders remote content as HTML', () => {
     assert.doesNotMatch(html, /x-html/);
   });
