@@ -68,6 +68,12 @@ describe('site', () => {
     assert.match(html, /<legend>Also check on these Mastodon servers \(<a href="#" data-x-bind="bindToggleMajors" data-x-text="toggleMajorsLabel">check all<\/a>\)<\/legend>/);
   });
 
+  test('Offers social markup with absolute URLs', () => {
+    assert.match(html, /property="og:url" content="https:\/\/j9t\.github\.io\/mamut\/"/);
+    assert.match(html, /property="og:image" content="https:\/\/j9t\.github\.io\/mamut\/logo\.png"/);
+    assert.match(html, /name="twitter:card" content="summary"/);
+  });
+
   test('Offers a reset button', () => {
     assert.match(html, /<button type="reset" data-x-cloak data-x-show="canClear">Clear<\/button>/);
   });
