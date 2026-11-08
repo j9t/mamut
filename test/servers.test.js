@@ -3,7 +3,7 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert';
 import { checkAccount } from '../src/mamut.js';
 import { parseServers } from '../src/lib/input.js';
-import { matchDomainBlock, SERVERS_MAJOR, syncHomeServer } from '../src/lib/servers.js';
+import { isMajorTicked, matchDomainBlock, SERVERS_MAJOR } from '../src/lib/servers.js';
 import { createFetcher, routesNodeinfo, routesWebfinger } from './helpers/fetcher.js';
 
 const HOST = 'social.example';
@@ -73,43 +73,23 @@ describe('`SERVERS_MAJOR`', () => {
   });
 });
 
-describe('`syncHomeServer`', () => {
-  const entries = () => [{ auto: false, checked: false, server: 'a.example' }, { auto: false, checked: false, server: 'b.example' }];
+describe('`isMajorTicked`', () => {
+  const entry = (checked) => ({ checked, server: 'a.example' });
 
-  test('Checks the account’s own server', () => {
-    const list = entries();
-    syncHomeServer(list, 'a.example');
-    assert.deepStrictEqual(list.map(entry => entry.checked), [true, false]);
+  test('Ticks the account’s own server without a manual choice', () => {
+    assert.strictEqual(isMajorTicked(entry(false), 'a.example'), true);
   });
 
-  test('Unchecks an automatically checked server when the domain changes', () => {
-    const list = entries();
-    syncHomeServer(list, 'a.example');
-    syncHomeServer(list, 'b.example');
-    assert.deepStrictEqual(list.map(entry => entry.checked), [false, true]);
+  test('Leaves an unchosen server unticked', () => {
+    assert.strictEqual(isMajorTicked(entry(false), 'b.example'), false);
   });
 
-  test('Unchecks an automatically checked server when the domain is gone', () => {
-    const list = entries();
-    syncHomeServer(list, 'a.example');
-    syncHomeServer(list, null);
-    assert.deepStrictEqual(list.map(entry => entry.checked), [false, false]);
+  test('Leaves an unchosen server unticked without a domain', () => {
+    assert.strictEqual(isMajorTicked(entry(false), null), false);
   });
 
-  test('Keeps a manually checked server when the domain changes', () => {
-    const list = entries();
-    list[0].checked = true;
-    syncHomeServer(list, 'a.example');
-    syncHomeServer(list, 'b.example');
-    assert.strictEqual(list[0].checked, true);
-  });
-
-  test('Respects unchecking an automatically checked server', () => {
-    const list = entries();
-    syncHomeServer(list, 'a.example');
-    list[0].checked = false;
-    syncHomeServer(list, 'a.example');
-    assert.strictEqual(list[0].checked, false);
+  test('Keeps a manual choice when the domain changes', () => {
+    assert.strictEqual(isMajorTicked(entry(true), 'b.example'), true);
   });
 });
 

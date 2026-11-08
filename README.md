@@ -24,7 +24,7 @@ Mamut doesn’t report an account as active unless the server publishes a modera
 
 ## Usage
 
-[Enter a handle or profile URL in Mamut.](https://j9t.github.io/mamut/) Optionally compare with major Mastodon servers, individually or all at once, or add specific servers. Add `#@name@server.example` to the page’s address to prefill the form; each lookup still needs to be confirmed.
+[Enter a handle or profile URL in Mamut.](https://j9t.github.io/mamut/) The account’s own server is always checked. Optionally compare with major Mastodon servers, individually or all at once, or add specific servers. Add `#@name@server.example` to the page’s address to prefill the form; each lookup still needs to be confirmed.
 
 ## How It Works
 

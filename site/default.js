@@ -1,8 +1,8 @@
 import Alpine from '@alpinejs/csp';
 import { createCooldown } from '../src/lib/cooldown.js';
 import { correctHandle, parseHandle, parseServers, readDomain } from '../src/lib/input.js';
-import { describeRequest, describeRestrictions, describeServer } from '../src/lib/labels.js';
-import { syncHomeServer } from '../src/lib/servers.js';
+import { describeHomeServer, describeRequest, describeRestrictions, describeServer, labelMajor } from '../src/lib/labels.js';
+import { isMajorTicked } from '../src/lib/servers.js';
 import { labelSoftware } from '../src/lib/status.js';
 import { checkAccount, InputError, SERVERS_MAJOR } from '../src/mamut.js';
 
@@ -28,7 +28,7 @@ const mamut = () => ({
   busy: false,
   error: '',
   handle: '',
-  majors: SERVERS_MAJOR.map(server => ({ auto: false, checked: false, server })),
+  majors: SERVERS_MAJOR.map(server => ({ checked: false, server })),
   result: null,
   run: 0,
   servers: '',
@@ -66,6 +66,24 @@ const mamut = () => ({
     }
   },
 
+  bindMajor: {
+    'data-x-bind:checked'() {
+      return isMajorTicked(this.entry, this.domain);
+    },
+    'data-x-bind:disabled'() {
+      return this.entry.server === this.domain;
+    },
+    'data-x-on:change'(event) {
+      this.entry.checked = event.target.checked;
+    }
+  },
+
+  bindMajorLabel: {
+    'data-x-text'() {
+      return labelMajor(this.entry.server, this.domain);
+    }
+  },
+
   bindProfile: {
     'data-x-bind:href'() {
       return this.result.account.urlProfile;
@@ -81,10 +99,7 @@ const mamut = () => ({
   bindToggleMajors: {
     'data-x-on:click.prevent'() {
       const checked = !this.areAllMajorsChecked;
-      for (const entry of this.majors) {
-        entry.auto = false;
-        entry.checked = checked;
-      }
+      for (const entry of this.majors) entry.checked = checked;
     }
   },
 
@@ -96,7 +111,7 @@ const mamut = () => ({
   },
 
   get areAllMajorsChecked() {
-    return this.majors.every(entry => entry.checked);
+    return this.majors.every(entry => isMajorTicked(entry, this.domain));
   },
 
   get buttonLabel() {
@@ -105,6 +120,10 @@ const mamut = () => ({
 
   get canClear() {
     return this.isActive || this.handle !== '' || this.servers !== '';
+  },
+
+  get domain() {
+    return readDomain(this.handle);
   },
 
   get facts() {
@@ -138,8 +157,16 @@ const mamut = () => ({
     return this.result?.servers.length > 0;
   },
 
+  get homeServerHint() {
+    return describeHomeServer(this.domain);
+  },
+
   get isActive() {
     return this.busy || this.hasError || this.hasResult;
+  },
+
+  get isErrorFree() {
+    return !this.hasError;
   },
 
   get isHome() {
@@ -167,7 +194,6 @@ const mamut = () => ({
   },
 
   init() {
-    this.$watch('handle', value => syncHomeServer(this.majors, readDomain(value)));
     // Links only fill in the form, so that shared or embedded links can’t generate traffic
     const fillFromHash = () => {
       const handle = readHash();
@@ -186,10 +212,7 @@ const mamut = () => ({
     this.handle = '';
     this.result = null;
     this.servers = '';
-    for (const entry of this.majors) {
-      entry.auto = false;
-      entry.checked = false;
-    }
+    for (const entry of this.majors) entry.checked = false;
     window.history.replaceState(null, '', window.location.pathname + window.location.search);
     document.getElementById('handle').focus();
   },

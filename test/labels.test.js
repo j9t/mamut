@@ -1,9 +1,29 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert';
-import { describeRestrictions, describeServer } from '../src/lib/labels.js';
+import { describeHomeServer, describeRestrictions, describeServer, labelMajor } from '../src/lib/labels.js';
 
 const entry = (account, domainBlock) => ({ account, domainBlock, supported: true });
 const unsupported = { supported: false };
+
+describe('`describeHomeServer`', () => {
+  test('Names the account’s own server', () => {
+    assert.strictEqual(describeHomeServer('social.example'), 'social.example, the account’s own server, is always checked.');
+  });
+
+  test('Speaks generally without a domain', () => {
+    assert.strictEqual(describeHomeServer(null), 'The account’s own server is always checked.');
+  });
+});
+
+describe('`labelMajor`', () => {
+  test('Marks the account’s own server', () => {
+    assert.strictEqual(labelMajor('a.example', 'a.example'), 'a.example (account’s server)');
+  });
+
+  test('Leaves other servers plain', () => {
+    assert.strictEqual(labelMajor('a.example', 'b.example'), 'a.example');
+  });
+});
 
 describe('`describeServer`', () => {
   test('Labels every account state', () => {

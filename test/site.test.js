@@ -61,7 +61,16 @@ describe('Site', () => {
   });
 
   test('Preselects no comparison servers', () => {
-    assert.match(read('default.js'), /majors: SERVERS_MAJOR\.map\(server => \(\{ auto: false, checked: false, server \}\)\)/);
+    assert.match(read('default.js'), /majors: SERVERS_MAJOR\.map\(server => \(\{ checked: false, server \}\)\)/);
+  });
+
+  test('Says which server is always checked', () => {
+    assert.match(html, /<small id="handle-hint" data-x-show="isErrorFree" data-x-text="homeServerHint">The account’s own server is always checked\.<\/small>/);
+    assert.match(html, /aria-describedby="handle-hint handle-error"/);
+  });
+
+  test('Locks the account’s own server among the comparison servers', () => {
+    assert.match(read('default.js'), /'data-x-bind:disabled'\(\) \{\s+return this\.entry\.server === this\.domain;/);
   });
 
   test('Offers to check all comparison servers', () => {

@@ -15,6 +15,16 @@ const LABELS_DOMAIN_BLOCK = {
   suspend: 'Whole server blocked'
 };
 
+/** @param {string | null} domain */
+export const describeHomeServer = (domain) =>
+  domain ? `${domain}, the account’s own server, is always checked.` : 'The account’s own server is always checked.';
+
+/**
+ * @param {string} server
+ * @param {string | null} domain
+ */
+export const labelMajor = (server, domain) => server === domain ? `${server} (account’s server)` : server;
+
 /** Words one other server’s report for display */
 export const describeServer = ({ account, domainBlock, domainBlockComment, softwareLabel, supported }) => {
   if (!supported) {

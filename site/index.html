@@ -24,15 +24,16 @@
 			<p class="question" data-x-show="isIdle">Is this Fediverse account in good standing?</p>
 			<form data-x-bind="bindForm">
 				<label for="handle">Account</label>
-				<input id="handle" name="handle" type="text" placeholder="@name@server.example" required autocapitalize="none" autocomplete="off" spellcheck="false" data-x-model="handle" data-x-bind="bindHandle" aria-describedby="handle-error">
+				<input id="handle" name="handle" type="text" placeholder="@name@server.example" required autocapitalize="none" autocomplete="off" spellcheck="false" data-x-model="handle" data-x-bind="bindHandle" aria-describedby="handle-hint handle-error">
+				<small id="handle-hint" data-x-show="isErrorFree" data-x-text="homeServerHint">The account’s own server is always checked.</small>
 				<small id="handle-error" role="alert" data-x-show="hasError" data-x-text="error"></small>
 				<fieldset>
 					<legend>Also check on these Mastodon servers (<a href="#" data-x-bind="bindToggleMajors" data-x-text="toggleMajorsLabel">check all</a>)</legend>
 					<div class="servers">
 						<template data-x-for="entry in majors">
 							<label>
-								<input type="checkbox" data-x-model="entry.checked">
-								<span data-x-text="entry.server"></span>
+								<input type="checkbox" data-x-bind="bindMajor">
+								<span data-x-bind="bindMajorLabel"></span>
 							</label>
 						</template>
 					</div>

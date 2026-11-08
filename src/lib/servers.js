@@ -20,23 +20,11 @@ const SEVERITY_RANK = new Map([['noop', 0], ['silence', 1], ['suspend', 2]]);
 const STATUSES_PRIVATE = new Set([401, 403, 404]);
 
 /**
- * Ticks the account’s own server, and unticks it again once the domain changes; manual choices stay
- * @param {{auto: boolean, checked: boolean, server: string}[]} entries
+ * The account’s own server always counts as ticked, as it’s checked regardless of any choice
+ * @param {{checked: boolean, server: string}} entry
  * @param {string | null} domain
  */
-export const syncHomeServer = (entries, domain) => {
-  for (const entry of entries) {
-    if (entry.server === domain) {
-      if (!entry.auto && !entry.checked) {
-        entry.auto = true;
-        entry.checked = true;
-      }
-    } else if (entry.auto) {
-      entry.auto = false;
-      entry.checked = false;
-    }
-  }
-};
+export const isMajorTicked = ({ checked, server }, domain) => checked || server === domain;
 
 /** @param {string} value */
 const hashSha256 = async (value) => {

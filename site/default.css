@@ -76,6 +76,8 @@ td small {
 
 small[role='alert'] {
 	color: var(--status-suspended);
+	display: block;
+	margin-block: calc(var(--pico-spacing) * -0.75) var(--pico-spacing);
 }
 
 .name {
