@@ -30,22 +30,25 @@ const fromMissing = async ({ client, host, software, username, webfinger }) => {
     return { confidence: CONFIDENCE.MEDIUM, notes: ['The server gives contradicting answers about this account.'], status: STATUS.UNAVAILABLE };
   }
 
+  const canConfirmDeletion = isAtLeast(software.version, VERSION_SEPARATE_DELETION);
   const isGone = status === 410;
   // A firewall can answer 403 for every profile, which a name that can’t exist exposes
-  const isPendingDeletion = status === 403 && (await requestProfile(client, host, USERNAME_CONTROL)).status === 404;
+  const isPendingDeletion = canConfirmDeletion && status === 403 && (await requestProfile(client, host, USERNAME_CONTROL)).status === 404;
 
-  if ((isGone || isPendingDeletion) && isAtLeast(software.version, VERSION_SEPARATE_DELETION)) {
+  if (canConfirmDeletion && (isGone || isPendingDeletion)) {
     return { confidence: CONFIDENCE.HIGH, notes: [], status: STATUS.DELETED };
   }
   return { confidence: CONFIDENCE.MEDIUM, notes: ['The account’s public profile can’t be read, and the reason is unclear.'], status: STATUS.UNAVAILABLE };
 };
 
+const formatMovedTo = (acct, host) => {
+  if (!acct || typeof acct !== 'string') return null;
+  return acct.includes('@') ? `@${acct}` : `@${acct}@${host}`;
+};
+
 const fromAccount = (account, host) => {
   if (account.limited) return { confidence: CONFIDENCE.HIGH, notes: [], status: STATUS.LIMITED };
-  if (account.moved) {
-    const { acct } = account.moved;
-    return { confidence: CONFIDENCE.HIGH, movedTo: acct?.includes('@') ? `@${acct}` : `@${acct}@${host}`, notes: [], status: STATUS.MOVED };
-  }
+  if (account.moved) return { confidence: CONFIDENCE.HIGH, movedTo: formatMovedTo(account.moved.acct, host), notes: [], status: STATUS.MOVED };
   if (account.memorial) return { confidence: CONFIDENCE.HIGH, notes: [], status: STATUS.MEMORIAL };
   return { confidence: CONFIDENCE.HIGH, notes: [], status: STATUS.ACTIVE };
 };

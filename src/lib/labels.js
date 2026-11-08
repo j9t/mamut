@@ -25,8 +25,8 @@ export const describeServer = ({ account, domainBlock, domainBlockComment, softw
     };
   }
   return {
-    account: LABELS_ACCOUNT[account] ?? account,
-    domainBlock: LABELS_DOMAIN_BLOCK[domainBlock] ?? domainBlock,
+    account: LABELS_ACCOUNT[account],
+    domainBlock: LABELS_DOMAIN_BLOCK[domainBlock],
     reason: domainBlockComment ?? ''
   };
 };

@@ -13,6 +13,7 @@ export const checkMisskey = async ({ client, host, username }) => {
   if (response.status !== 200 || !response.json) return fromInconclusive(response);
 
   const { isSilenced, isSuspended, movedTo } = response.json;
+  // Current Misskey and Sharkey answer 404 instead, but a fork that reports this mustn’t come out as active
   if (isSuspended) return { confidence: CONFIDENCE.HIGH, notes: [], status: STATUS.SUSPENDED };
   if (isSilenced) return { confidence: CONFIDENCE.HIGH, notes: [], status: STATUS.LIMITED };
   if (movedTo) return { confidence: CONFIDENCE.HIGH, notes: [], status: STATUS.MOVED };

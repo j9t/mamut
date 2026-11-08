@@ -6,9 +6,9 @@ import { detectSoftware, resolveWebfinger } from './lib/discovery.js';
 import { createClient } from './lib/http.js';
 import { InputError, parseHandle, parseServers } from './lib/input.js';
 import { checkOnServer, SERVERS_MAJOR } from './lib/servers.js';
-import { CONFIDENCE, describeResult, fromInconclusive, STATUS } from './lib/status.js';
+import { describeResult, fromInconclusive } from './lib/status.js';
 
-export { InputError, SERVERS_MAJOR, STATUS };
+export { InputError, SERVERS_MAJOR };
 
 const ADAPTERS = new Map([
   ['hometown', checkMastodon],
@@ -41,10 +41,10 @@ export const checkAccount = async (input, { fetcher, servers, signal } = {}) => 
   const serversChecked = await Promise.all(serversOther.map(server => checkOnServer(client, server, account, domains)));
 
   const result = {
-    account: { ...account, urlActor: webfinger.urlActor, urlProfile: webfinger.urlProfile },
+    account: { ...account, urlProfile: webfinger.urlProfile },
     banExpires: outcome.banExpires ?? null,
     checkedAt: new Date().toISOString(),
-    confidence: outcome.confidence ?? CONFIDENCE.LOW,
+    confidence: outcome.confidence,
     host,
     movedTo: outcome.movedTo ?? null,
     notes: outcome.notes,

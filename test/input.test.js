@@ -2,7 +2,7 @@ import { describe, test } from 'node:test';
 import assert from 'node:assert';
 import { correctHandle, InputError, isPublicHostname, parseHandle, parseServers, readDomain } from '../src/lib/input.js';
 
-describe('parseHandle', () => {
+describe('`parseHandle`', () => {
   const expected = { acct: 'alice@social.example', domain: 'social.example', handle: '@alice@social.example', username: 'alice' };
 
   for (const input of [
@@ -42,7 +42,7 @@ describe('parseHandle', () => {
   }
 });
 
-describe('correctHandle', () => {
+describe('`correctHandle`', () => {
   test('Adds the leading “@” to “name@instance”', () => {
     assert.strictEqual(correctHandle('alice@social.example'), '@alice@social.example');
   });
@@ -62,7 +62,7 @@ describe('correctHandle', () => {
   }
 });
 
-describe('readDomain', () => {
+describe('`readDomain`', () => {
   test('Returns the domain of a handle', () => {
     assert.strictEqual(readDomain('@alice@Social.example'), 'social.example');
   });
@@ -78,7 +78,7 @@ describe('readDomain', () => {
   }
 });
 
-describe('isPublicHostname', () => {
+describe('`isPublicHostname`', () => {
   test('Accepts a regular hostname', () => {
     assert.strictEqual(isPublicHostname('mastodon.social'), true);
   });
@@ -88,7 +88,7 @@ describe('isPublicHostname', () => {
   });
 });
 
-describe('parseServers', () => {
+describe('`parseServers`', () => {
   test('Splits, normalizes, and deduplicates servers', () => {
     assert.deepStrictEqual(parseServers('a.example, B.example,a.example\nhttps://c.example/'), ['a.example', 'b.example', 'c.example']);
   });

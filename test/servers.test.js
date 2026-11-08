@@ -26,7 +26,7 @@ const checkOn = async (routesOther, software = ['mastodon', '4.7.5']) => {
   return { calls, entry: result.servers[0], result };
 };
 
-describe('matchDomainBlock', () => {
+describe('`matchDomainBlock`', () => {
   test('Matches a plain domain', async () => {
     const match = await matchDomainBlock([{ digest: 'x', domain: HOST, severity: 'suspend' }], [HOST]);
     assert.strictEqual(match.severity, 'suspend');
@@ -63,7 +63,7 @@ describe('matchDomainBlock', () => {
   });
 });
 
-describe('SERVERS_MAJOR', () => {
+describe('`SERVERS_MAJOR`', () => {
   test('Passes server validation', () => {
     assert.deepStrictEqual(parseServers(SERVERS_MAJOR), [...SERVERS_MAJOR]);
   });
@@ -73,7 +73,7 @@ describe('SERVERS_MAJOR', () => {
   });
 });
 
-describe('syncHomeServer', () => {
+describe('`syncHomeServer`', () => {
   const entries = () => [{ auto: false, checked: false, server: 'a.example' }, { auto: false, checked: false, server: 'b.example' }];
 
   test('Checks the account’s own server', () => {
@@ -113,7 +113,7 @@ describe('syncHomeServer', () => {
   });
 });
 
-describe('checkAccount across servers', () => {
+describe('`checkAccount` across servers', () => {
   test('Reports a suspension on another server', async () => {
     const { entry } = await checkOn({ [URL_LOOKUP_OTHER]: { json: { suspended: true } }, [URL_BLOCKS]: { json: [] } });
     assert.strictEqual(entry.account, 'suspended');
