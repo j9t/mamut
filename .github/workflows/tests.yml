@@ -21,10 +21,6 @@ jobs:
         platform: [ubuntu-latest]
         # “22” is the oldest Node.js version that html-minifier, used in the build, supports
         node: ["22", "lts/*", "current"]
-        include:
-          # Windows: One LTS job is enough
-          - platform: windows-latest
-            node: "lts/*"
     name: "Node ${{ matrix.node }} (${{ matrix.platform }})"
     runs-on: ${{ matrix.platform }}
     steps:
