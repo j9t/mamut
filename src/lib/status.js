@@ -50,11 +50,10 @@ export const fromInconclusive = ({ failure, status }) => {
 };
 
 /** @returns {{explanation: string, headline: string}} */
-export const describeResult = ({ account: { domain }, movedTo, software, status }) => {
-  const nameSoftware = labelSoftware(software);
+export const describeResult = ({ account: { domain }, movedTo, status }) => {
   switch (status) {
     case STATUS.ACTIVE:
-      return { explanation: `${nameSoftware} reports no suspension or limit on this account.`, headline: `Active on ${domain}` };
+      return { explanation: 'Its home server reports no suspension or limit on this account.', headline: `Active on ${domain}` };
     case STATUS.DELETED:
       return { explanation: 'The account was removed by its owner, not by moderators.', headline: 'Deleted by its owner' };
     case STATUS.LIMITED:
@@ -70,7 +69,7 @@ export const describeResult = ({ account: { domain }, movedTo, software, status 
     case STATUS.UNAVAILABLE:
       return { explanation: 'The account can’t be found, and the server doesn’t reveal why.', headline: `Unavailable on ${domain}` };
     case STATUS.UNDETERMINED:
-      return { explanation: `The account’s moderation status isn’t public on ${domain}. This does not mean the account is in good standing.`, headline: 'Moderation status not public' };
+      return { explanation: `It isn’t public whether this account is limited or suspended on ${domain}, so it may or may not be in good standing.`, headline: 'Status not public' };
     default:
       return { explanation: 'Mamut couldn’t get an answer, so nothing can be said about this account.', headline: `Couldn’t check ${domain}` };
   }
