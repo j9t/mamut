@@ -1,13 +1,15 @@
 import { detectSoftware } from './discovery.js';
 import { labelSoftware } from './status.js';
 
-// The most active servers on joinmastodon.org as of November 2026
+// Major servers from https://joinmastodon.org/servers and https://mastodonservers.net/servers/top, sorted by monthly active users as of November 2026
 export const SERVERS_MAJOR = Object.freeze([
   'mastodon.social',
   'mstdn.jp',
   'mstdn.social',
   'infosec.exchange',
+  'mas.to',
   'hachyderm.io',
+  'mastodon.online',
   'mastodon.world',
   'troet.cafe',
   'techhub.social'
