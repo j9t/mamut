@@ -6,10 +6,10 @@
     "@alpinejs/csp": "^3.17.5",
     "@eslint/js": "^10.0.1",
     "@picocss/pico": "^2.1.1",
-    "eslint": "^10.14.0",
+    "eslint": "^10.15.0",
     "globals": "^17.14.0",
-    "html-minifier": "^5.0.1",
-    "vite": "^8.3.6"
+    "html-minifier": "^5.2.0",
+    "vite": "^8.3.8"
   },
   "funding": "https://github.com/j9t/mamut?sponsor=1",
   "homepage": "https://j9t.github.io/mamut/",
