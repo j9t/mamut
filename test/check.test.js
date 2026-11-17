@@ -44,7 +44,7 @@ describe('`checkAccount` on Mastodon', () => {
       const result = await check({ ...base(), [URL_LOOKUP]: { json: { ...accountActive, moved } } });
       assert.strictEqual(result.status, STATUS.MOVED);
       assert.strictEqual(result.movedTo, null);
-      assert.strictEqual(result.headline, 'Moved to another account');
+      assert.strictEqual(result.headline, 'Moved to Another Account');
     }
   });
 

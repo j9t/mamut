@@ -55,22 +55,22 @@ export const describeResult = ({ account: { domain }, movedTo, status }) => {
     case STATUS.ACTIVE:
       return { explanation: 'Its home server reports no suspension or limit on this account.', headline: `Active on ${domain}` };
     case STATUS.DELETED:
-      return { explanation: 'The account was removed by its owner, not by moderators.', headline: 'Deleted by its owner' };
+      return { explanation: 'The account was removed by its owner, not by moderators.', headline: 'Deleted by Its Owner' };
     case STATUS.LIMITED:
       return { explanation: 'Moderators have restricted this account’s visibility on its home server.', headline: `Limited by ${domain}` };
     case STATUS.MEMORIAL:
       return { explanation: 'The account is preserved in memory of its owner.', headline: 'Memorialized' };
     case STATUS.MOVED:
-      return { explanation: 'The owner has moved this account elsewhere.', headline: movedTo ? `Moved to ${movedTo}` : 'Moved to another account' };
+      return { explanation: 'The owner has moved this account elsewhere.', headline: movedTo ? `Moved to ${movedTo}` : 'Moved to Another Account' };
     case STATUS.NOT_FOUND:
-      return { explanation: 'This server has no account with this name. Check the spelling and the server.', headline: `Not found on ${domain}` };
+      return { explanation: 'This server has no account with this name. Check the spelling and the server.', headline: `Not Found on ${domain}` };
     case STATUS.SUSPENDED:
       return { explanation: 'Moderators have suspended this account on its home server.', headline: `Suspended by ${domain}` };
     case STATUS.UNAVAILABLE:
       return { explanation: 'The account can’t be found, and the server doesn’t reveal why.', headline: `Unavailable on ${domain}` };
     case STATUS.UNDETERMINED:
-      return { explanation: `It isn’t public whether this account is limited or suspended on ${domain}, so it may or may not be in good standing.`, headline: 'Status not public' };
+      return { explanation: `It isn’t public whether this account is limited or suspended on ${domain}, so it may or may not be in good standing.`, headline: 'Status Not Public' };
     default:
-      return { explanation: 'Mamut couldn’t get an answer, so nothing can be said about this account.', headline: `Couldn’t check ${domain}` };
+      return { explanation: 'Mamut couldn’t get an answer, so nothing can be said about this account.', headline: `Couldn’t Check ${domain}` };
   }
 };
