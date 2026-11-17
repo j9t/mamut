@@ -9,6 +9,12 @@
 	--status-suspended: #a01c28;
 }
 
+html {
+	-webkit-font-smoothing: antialiased;
+	scroll-behavior: smooth;
+	text-wrap: pretty;
+}
+
 body > header,
 body > footer,
 body > main {
